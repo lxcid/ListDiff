@@ -79,6 +79,12 @@ enum List {
         func validate(_ oldArray: Array<Diffable>, _ newArray: Array<Diffable>) -> Bool {
             return (oldArray.count + self.inserts.count - self.deletes.count) == newArray.count
         }
+        func oldIndexFor(identifier: AnyHashable) -> Int? {
+            return self.oldMap[identifier]
+        }
+        func newIndexFor(identifier: AnyHashable) -> Int? {
+            return self.newMap[identifier]
+        }
     }
     
     static func Diffing(oldArray:Array<Diffable>, newArray:Array<Diffable>) -> Result {

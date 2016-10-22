@@ -122,6 +122,47 @@ class ListDiffTests : XCTestCase {
         XCTAssertTrue(result.hasChanges)
         XCTAssertEqual(o.count + result.inserts.count - result.deletes.count, 4)
     }
+    
+    // test_whenDuplicateObjects_thatMovesAreUnique
+    
+    func test_whenMovingObjectShiftsOthers_thatMovesContainRequiredMoves() {
+        let o = Array<Int>(arrayLiteral: 1, 2, 3, 4, 5, 6, 7)
+        let n = Array<Int>(arrayLiteral: 1, 4, 5, 2, 3, 6, 7)
+        let result = List.Diffing(oldArray: o, newArray: n)
+        XCTAssertTrue(result.hasChanges)
+        XCTAssertTrue(result.moves.contains(List.MoveIndex(from: 3, to: 1)))
+        XCTAssertTrue(result.moves.contains(List.MoveIndex(from: 1, to: 3)))
+    }
+
+    func test_whenDiffing_thatOldIndexesMatch() {
+        let o = Array<Int>(arrayLiteral: 1, 2, 3, 4, 5, 6, 7)
+        let n = Array<Int>(arrayLiteral: 2, 9, 3, 1, 5, 6, 8)
+        let result = List.Diffing(oldArray: o, newArray: n)
+        XCTAssertEqual(result.oldIndexFor(identifier: "1"), 0)
+        XCTAssertEqual(result.oldIndexFor(identifier: "2"), 1)
+        XCTAssertEqual(result.oldIndexFor(identifier: "3"), 2)
+        XCTAssertEqual(result.oldIndexFor(identifier: "4"), 3)
+        XCTAssertEqual(result.oldIndexFor(identifier: "5"), 4)
+        XCTAssertEqual(result.oldIndexFor(identifier: "6"), 5)
+        XCTAssertEqual(result.oldIndexFor(identifier: "7"), 6)
+        XCTAssertEqual(result.oldIndexFor(identifier: "8"), nil)
+        XCTAssertEqual(result.oldIndexFor(identifier: "9"), nil)
+    }
+    
+    func test_whenDiffing_thatNewIndexesMatch() {
+        let o = Array<Int>(arrayLiteral: 1, 2, 3, 4, 5, 6, 7)
+        let n = Array<Int>(arrayLiteral: 2, 9, 3, 1, 5, 6, 8)
+        let result = List.Diffing(oldArray: o, newArray: n)
+        XCTAssertEqual(result.newIndexFor(identifier: "1"), 3)
+        XCTAssertEqual(result.newIndexFor(identifier: "2"), 0)
+        XCTAssertEqual(result.newIndexFor(identifier: "3"), 2)
+        XCTAssertEqual(result.newIndexFor(identifier: "4"), nil)
+        XCTAssertEqual(result.newIndexFor(identifier: "5"), 4)
+        XCTAssertEqual(result.newIndexFor(identifier: "6"), 5)
+        XCTAssertEqual(result.newIndexFor(identifier: "7"), nil)
+        XCTAssertEqual(result.newIndexFor(identifier: "8"), 6)
+        XCTAssertEqual(result.newIndexFor(identifier: "9"), 1)
+    }
 
     static var allTests : [(String, (ListDiffTests) -> () throws -> Void)] {
         return [
@@ -136,6 +177,9 @@ class ListDiffTests : XCTestCase {
             ("test_whenDeletingItems_withInserts_withMoves_thatResultHasInsertsMovesAndDeletes", test_whenDeletingItems_withInserts_withMoves_thatResultHasInsertsMovesAndDeletes),
             ("test_whenDeletingObjects_withArrayOfEqualObjects_thatChangeCountMatches", test_whenDeletingObjects_withArrayOfEqualObjects_thatChangeCountMatches),
             ("test_whenInsertingObjects_withArrayOfEqualObjects_thatChangeCountMatches", test_whenInsertingObjects_withArrayOfEqualObjects_thatChangeCountMatches),
+            ("test_whenMovingObjectShiftsOthers_thatMovesContainRequiredMoves", test_whenMovingObjectShiftsOthers_thatMovesContainRequiredMoves),
+            ("test_whenDiffing_thatOldIndexesMatch", test_whenDiffing_thatOldIndexesMatch),
+            ("test_whenDiffing_thatNewIndexesMatch", test_whenDiffing_thatNewIndexesMatch),
         ]
     }
 }
