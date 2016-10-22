@@ -54,9 +54,13 @@ enum List {
         }
     }
     
-    struct MoveIndex {
+    struct MoveIndex : Equatable {
         let from: Int
         let to: Int
+        
+        public static func ==(lhs: MoveIndex, rhs: MoveIndex) -> Bool {
+            return lhs.from == rhs.from && lhs.to == rhs.to
+        }
     }
     
     struct Result {
@@ -105,7 +109,7 @@ enum List {
         // increment its old count for each occurence
         // record the old index for each occurence of the item in the old array
         // MUST be done in descending order to respect the oldIndexes stack construction
-        var oldRecords = oldArray.reversed().enumerated().map { (i, oldItem) -> Record in
+        var oldRecords = oldArray.enumerated().reversed().map { (i, oldItem) -> Record in
             let key = oldItem.diffIdentifier
             if let entry = table[key] {
                 // push the old indices where the item occured onto the index stack
@@ -124,7 +128,7 @@ enum List {
         // handle data that occurs in both arrays
         newRecords.filter { $0.entry.occurOnBothSides }.map { $0.entry }.enumerated().forEach { (i, entry) in
             // grab and pop the top old index. if the item was inserted this will be nil
-            assert(entry.oldIndexes.isEmpty, "Old indexes is empty while iterating new item \(i). Should have nil")
+            assert(!entry.oldIndexes.isEmpty, "Old indexes is empty while iterating new item \(i). Should have nil")
             guard let oldIndex = entry.oldIndexes.pop() else {
                 return
             }
