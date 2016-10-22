@@ -126,7 +126,7 @@ enum List {
         
         // pass 3
         // handle data that occurs in both arrays
-        newRecords.filter { $0.entry.occurOnBothSides }.map { $0.entry }.enumerated().forEach { (i, entry) in
+        newRecords.enumerated().filter { $1.entry.occurOnBothSides }.map { ($0, $1.entry) }.forEach { (i, entry) in
             // grab and pop the top old index. if the item was inserted this will be nil
             assert(!entry.oldIndexes.isEmpty, "Old indexes is empty while iterating new item \(i). Should have nil")
             guard let oldIndex = entry.oldIndexes.pop() else {
