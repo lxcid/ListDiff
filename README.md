@@ -1,10 +1,10 @@
 # ListDiff
 
-__ListDiff__ is an Swift port of [IGListKit](https://github.com/Instagram/IGListKit)'s [IGListDiff](https://github.com/Instagram/IGListKit/blob/cdc796746adf95d9a9ae78379a29cddf50c9f738/Source/IGListDiff.mm).
+__ListDiff__ is an Swift port of [IGListKit](https://github.com/Instagram/IGListKit)'s [IGListDiff](https://github.com/Instagram/IGListKit/blob/cdc796746adf95d9a9ae78379a29cddf50c9f738/Source/IGListDiff.mm). It is an implementation of [an algorithm by Paul Heckel](http://dl.acm.org/citation.cfm?id=359467&dl=ACM&coll=DL).
 
 ## Motivation
 
-The motivation for this project came from the following challenge [challenge](https://github.com/Instagram/IGListKit/issues/76) which I learnt about from [Ryan Nystrom](https://twitter.com/_ryannystrom)'s talk in [iOSConf.SG](http://iosconf.sg).
+The motivation for this project came from the following [challenge](https://github.com/Instagram/IGListKit/issues/76) which I learnt about from [Ryan Nystrom](https://twitter.com/_ryannystrom)'s talk in [iOSConf.SG](http://iosconf.sg).
 
 ## Getting Started
 
