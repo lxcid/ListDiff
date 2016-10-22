@@ -106,6 +106,22 @@ class ListDiffTests : XCTestCase {
         XCTAssertEqual(result.inserts, IndexSet.from(array: [6, 8]))
         XCTAssertEqual(result.moves, [List.MoveIndex(from: 7, to: 4), List.MoveIndex(from: 5, to: 7)])
     }
+    
+    func test_whenDeletingObjects_withArrayOfEqualObjects_thatChangeCountMatches() {
+        let o = Array<String>(arrayLiteral: "dog", "dog", "dog", "dog")
+        let n = Array<String>(arrayLiteral: "dog", "dog")
+        let result = List.Diffing(oldArray: o, newArray: n)
+        XCTAssertTrue(result.hasChanges)
+        XCTAssertEqual(o.count + result.inserts.count - result.deletes.count, 2)
+    }
+    
+    func test_whenInsertingObjects_withArrayOfEqualObjects_thatChangeCountMatches() {
+        let o = Array<String>(arrayLiteral: "dog", "dog")
+        let n = Array<String>(arrayLiteral: "dog", "dog", "dog", "dog")
+        let result = List.Diffing(oldArray: o, newArray: n)
+        XCTAssertTrue(result.hasChanges)
+        XCTAssertEqual(o.count + result.inserts.count - result.deletes.count, 4)
+    }
 
     static var allTests : [(String, (ListDiffTests) -> () throws -> Void)] {
         return [
@@ -118,6 +134,8 @@ class ListDiffTests : XCTestCase {
             ("test_whenDiffingWordsFromPaper_thatInsertsMatchPaper", test_whenDiffingWordsFromPaper_thatInsertsMatchPaper),
             ("test_whenDiffingWordsFromPaper_thatDeletesMatchPaper", test_whenDiffingWordsFromPaper_thatDeletesMatchPaper),
             ("test_whenDeletingItems_withInserts_withMoves_thatResultHasInsertsMovesAndDeletes", test_whenDeletingItems_withInserts_withMoves_thatResultHasInsertsMovesAndDeletes),
+            ("test_whenDeletingObjects_withArrayOfEqualObjects_thatChangeCountMatches", test_whenDeletingObjects_withArrayOfEqualObjects_thatChangeCountMatches),
+            ("test_whenInsertingObjects_withArrayOfEqualObjects_thatChangeCountMatches", test_whenInsertingObjects_withArrayOfEqualObjects_thatChangeCountMatches),
         ]
     }
 }
