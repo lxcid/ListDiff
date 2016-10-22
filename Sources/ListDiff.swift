@@ -87,7 +87,7 @@ enum List {
         }
     }
     
-    static func Diffing(oldArray:Array<Diffable>, newArray:Array<Diffable>) -> Result {
+    static func diffing(oldArray:Array<Diffable>, newArray:Array<Diffable>) -> Result {
         // symbol table uses the old/new array `diffIdentifier` as the key and `Entry` as the value
         var table = Dictionary<AnyHashable, Entry>()
         
