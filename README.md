@@ -4,7 +4,7 @@ __ListDiff__ is an Swift port of [IGListKit](https://github.com/Instagram/IGList
 
 ## Motivation
 
-The motivation for this project came from the following challenge [challenge](https://github.com/Instagram/IGListKit/issues/76) which I learnt about from (Ryan Nystrom)[https://twitter.com/_ryannystrom]'s talk in [iOSConf.SG](http://iosconf.sg).
+The motivation for this project came from the following challenge [challenge](https://github.com/Instagram/IGListKit/issues/76) which I learnt about from [Ryan Nystrom](https://twitter.com/_ryannystrom)'s talk in [iOSConf.SG](http://iosconf.sg).
 
 ## Getting Started
 
