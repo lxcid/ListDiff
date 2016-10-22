@@ -95,8 +95,8 @@ enum List {
         // create an entry for every item in the new array
         // increment its new count for each occurence
         // record `nil` for each occurence of the item in the new array
-        var newRecords = newArray.map { (newItem) -> Record in
-            let key = newItem.diffIdentifier
+        var newRecords = newArray.map { (newRecord) -> Record in
+            let key = newRecord.diffIdentifier
             if let entry = table[key] {
                 // add `nil` for each occurence of the item in the new array
                 entry.push(new: nil)
@@ -115,8 +115,8 @@ enum List {
         // increment its old count for each occurence
         // record the old index for each occurence of the item in the old array
         // MUST be done in descending order to respect the oldIndexes stack construction
-        var oldRecords = oldArray.enumerated().reversed().map { (i, oldItem) -> Record in
-            let key = oldItem.diffIdentifier
+        var oldRecords = oldArray.enumerated().reversed().map { (i, oldRecord) -> Record in
+            let key = oldRecord.diffIdentifier
             if let entry = table[key] {
                 // push the old indices where the item occured onto the index stack
                 entry.push(old: i)
@@ -132,7 +132,8 @@ enum List {
         
         // pass 3
         // handle data that occurs in both arrays
-        newRecords.enumerated().filter { $1.entry.occurOnBothSides }.map { ($0, $1.entry) }.forEach { (i, entry) in
+        newRecords.enumerated().filter { $1.entry.occurOnBothSides }.forEach { (i, newRecord) in
+            let entry = newRecord.entry
             // grab and pop the top old index. if the item was inserted this will be nil
             assert(!entry.oldIndexes.isEmpty, "Old indexes is empty while iterating new item \(i). Should have nil")
             guard let oldIndex = entry.oldIndexes.pop() else {
