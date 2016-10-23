@@ -139,7 +139,7 @@ enum List {
             guard let oldIndex = entry.oldIndexes.pop() else {
                 return
             }
-            if (oldIndex < oldArray.count) {
+            if oldIndex < oldArray.count {
                 let n = newArray[i]
                 let o = oldArray[oldIndex]
                 if n != o {
@@ -184,7 +184,7 @@ enum List {
                 // calculate the offset and determine if there was a move
                 // if the indexes match, ignore the index
                 let deleteOffset = deleteOffsets[oldIndex]
-                if ((oldIndex - deleteOffset + insertOffset) != i) {
+                if (oldIndex - deleteOffset + insertOffset) != i {
                     result.moves.append(MoveIndex(from: oldIndex, to: i))
                 }
             } else { // add to inserts if the opposing index is nil
