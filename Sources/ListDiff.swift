@@ -17,11 +17,6 @@ protocol Diffable {
     var diffIdentifier: AnyHashable { get }
 }
 
-enum DiffOption<T> {
-    case equality
-    case custom((T, T) -> Bool)
-}
-
 /// https://github.com/Instagram/IGListKit/blob/master/Source/IGListDiff.mm
 enum List {
     /// Used to track data stats while diffing.
@@ -92,7 +87,7 @@ enum List {
         }
     }
     
-    static func diffing<T: Diffable & Equatable>(oldArray:Array<T>, newArray:Array<T>, option: DiffOption<T> = .equality) -> Result {
+    static func diffing<T: Diffable & Equatable>(oldArray:Array<T>, newArray:Array<T>) -> Result {
         // symbol table uses the old/new array `diffIdentifier` as the key and `Entry` as the value
         var table = Dictionary<AnyHashable, Entry>()
         
@@ -147,15 +142,8 @@ enum List {
             if (oldIndex < oldArray.count) {
                 let n = newArray[i]
                 let o = oldArray[oldIndex]
-                switch option {
-                case .equality:
-                    if n != o {
-                        entry.updated = true
-                    }
-                case .custom(let isUpdated):
-                    if !isUpdated(n, o) {
-                        entry.updated = true
-                    }
+                if n != o {
+                    entry.updated = true
                 }
             }
             
