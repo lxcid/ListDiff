@@ -14,6 +14,40 @@ extension String: Diffable {
     }
 }
 
+class TestObject : Diffable, Equatable {
+    let diffIdentifier: AnyHashable
+    let value: Int
+    
+    init(diffIdentifier: AnyHashable, value: Int) {
+        self.diffIdentifier = diffIdentifier
+        self.value = value
+    }
+    
+    static func ==(lhs: TestObject, rhs: TestObject) -> Bool {
+        return (lhs === rhs) || (lhs.diffIdentifier == rhs.diffIdentifier && lhs.value == rhs.value)
+    }
+}
+
+class TestObjectRef : Diffable, Equatable {
+    let diffIdentifier: AnyHashable
+    let value: Int
+    
+    init(diffIdentifier: AnyHashable, value: Int) {
+        self.diffIdentifier = diffIdentifier
+        self.value = value
+    }
+    
+    static func ==(lhs: TestObjectRef, rhs: TestObjectRef) -> Bool {
+        return lhs === rhs
+    }
+}
+
+extension NSObject : Diffable {
+    var diffIdentifier: AnyHashable {
+        return self.hash
+    }
+}
+
 extension IndexSet {
     static func from(array: Array<Int>) -> IndexSet {
         var indexSet = IndexSet()
@@ -75,7 +109,22 @@ class ListDiffTests : XCTestCase {
         XCTAssertEqual(result.moves, [List.MoveIndex(from: 3, to: 1), List.MoveIndex(from: 2, to: 3)])
     }
     
-    // TODO: (stan@trifia.com) test_whenObjectEqualityChanges_thatResultHasUpdates
+    func test_whenObjectEqualityChanges_thatResultHasUpdates() {
+        let o = [
+            TestObject(diffIdentifier: "0", value: 0),
+            TestObject(diffIdentifier: "1", value: 1),
+            TestObject(diffIdentifier: "2", value: 2),
+        ]
+        let n = [
+            TestObject(diffIdentifier: "0", value: 0),
+            TestObject(diffIdentifier: "1", value: 3), // value updated from 1 to 3
+            TestObject(diffIdentifier: "2", value: 2),
+        ]
+        let result = List.diffing(oldArray: o, newArray: n)
+        XCTAssertTrue(result.hasChanges)
+        XCTAssertEqual(result.updates, IndexSet(integer: 1))
+        XCTAssertEqual(result.changeCount, 1)
+    }
     
     func test_whenDiffingWordsFromPaper_thatInsertsMatchPaper() {
         // http://dl.acm.org/citation.cfm?id=359467&dl=ACM&coll=DL&CFID=529464736&CFTOKEN=43088172
@@ -107,6 +156,52 @@ class ListDiffTests : XCTestCase {
         XCTAssertEqual(result.moves, [List.MoveIndex(from: 7, to: 4), List.MoveIndex(from: 5, to: 7)])
     }
     
+    func test_whenMovingItems_withEqualityChanges_thatResultsHasMovesAndUpdates() {
+        let o = [
+            TestObject(diffIdentifier: "0", value: 0),
+            TestObject(diffIdentifier: "1", value: 1),
+            TestObject(diffIdentifier: "2", value: 2),
+            ]
+        let n = [
+            TestObject(diffIdentifier: "2", value: 3),
+            TestObject(diffIdentifier: "1", value: 1),
+            TestObject(diffIdentifier: "0", value: 0),
+            ]
+        let result = List.diffing(oldArray: o, newArray: n)
+        XCTAssertTrue(result.hasChanges)
+        XCTAssertEqual(result.moves, [List.MoveIndex(from: 2, to: 0), List.MoveIndex(from: 0, to: 2)])
+        XCTAssertEqual(result.updates, IndexSet(integer: 2))
+        XCTAssertEqual(result.changeCount, 3)
+    }
+    
+    func test_whenDiffingPointers_withObjectCopy_thatResultHasUpdate() {
+        let o = [
+            TestObjectRef(diffIdentifier: "0", value: 0),
+            TestObjectRef(diffIdentifier: "1", value: 1),
+            TestObjectRef(diffIdentifier: "2", value: 2),
+            ]
+        let n = [
+            o[0],
+            TestObjectRef(diffIdentifier: "1", value: 1), // new pointer
+            o[2]
+        ]
+        let result = List.diffing(oldArray: o, newArray: n)
+        XCTAssertTrue(result.hasChanges)
+        XCTAssertEqual(result.updates, IndexSet(integer: 1))
+        XCTAssertEqual(result.changeCount, 1)
+    }
+    
+    func test_whenDiffingPointers_withSameObjects_thatResultHasNoChanges() {
+        let o = [
+            TestObjectRef(diffIdentifier: "0", value: 0),
+            TestObjectRef(diffIdentifier: "1", value: 1),
+            TestObjectRef(diffIdentifier: "2", value: 2),
+            ]
+        let n = o.map { $0 }
+        let result = List.diffing(oldArray: o, newArray: n)
+        XCTAssertFalse(result.hasChanges)
+    }
+    
     func test_whenDeletingObjects_withArrayOfEqualObjects_thatChangeCountMatches() {
         let o = Array<String>(arrayLiteral: "dog", "dog", "dog", "dog")
         let n = Array<String>(arrayLiteral: "dog", "dog")
@@ -123,7 +218,108 @@ class ListDiffTests : XCTestCase {
         XCTAssertEqual(o.count + result.inserts.count - result.deletes.count, 4)
     }
     
-    // test_whenDuplicateObjects_thatMovesAreUnique
+    func test_whenInsertingObject_withOldArrayHavingMultiples_thatChangeCountMatches() {
+        let o: [NSObject] = [
+            NSObject(),
+            NSObject(),
+            NSObject(),
+            NSNumber(integerLiteral: 49),
+            NSNumber(integerLiteral: 33),
+            NSString(string: "cat"),
+            NSString(string: "cat"),
+            NSNumber(integerLiteral: 0),
+            NSNumber(integerLiteral: 14),
+        ]
+        var n = o
+        n.insert(NSString(string: "cat"), at: 5)
+        let result = List.diffing(oldArray: o, newArray: n)
+        XCTAssertTrue(result.hasChanges)
+        XCTAssertEqual(o.count + result.inserts.count - result.deletes.count, n.count)
+    }
+    
+    func test_whenMovingDuplicateObjects_thatChangeCountMatches() {
+        let o: [NSObject] = [
+            NSNumber(integerLiteral: 1),
+            NSNumber(integerLiteral: 20),
+            NSNumber(integerLiteral: 14),
+            NSObject(),
+            NSString(string: "cat"),
+            NSObject(),
+            NSNumber(integerLiteral: 4),
+            NSString(string: "dog"),
+            NSString(string: "cat"),
+            NSString(string: "cat"),
+            NSString(string: "fish"),
+            NSObject(),
+            NSString(string: "fish"),
+            NSObject(),
+        ]
+        let n: [NSObject] = [
+            NSNumber(integerLiteral: 1),
+            NSNumber(integerLiteral: 28),
+            NSNumber(integerLiteral: 14),
+            NSString(string: "cat"),
+            NSString(string: "cat"),
+            NSNumber(integerLiteral: 4),
+            NSString(string: "dog"),
+            o[3],
+            NSString(string: "cat"),
+            NSString(string: "fish"),
+            o[11],
+            NSString(string: "fish"),
+            o[13],
+        ]
+        let result = List.diffing(oldArray: o, newArray: n)
+        XCTAssertTrue(result.hasChanges)
+        XCTAssertEqual(o.count + result.inserts.count - result.deletes.count, n.count)
+    }
+    
+    func test_whenDiffingDuplicatesAtTail_withDuplicateAtHead_thatResultHasNoChanges() {
+        let o: [NSObject] = [
+            NSString(string: "cat"),
+            NSNumber(integerLiteral: 1),
+            NSNumber(integerLiteral: 2),
+            NSNumber(integerLiteral: 3),
+            NSString(string: "cat"),
+        ]
+        let n: [NSObject] = [
+            NSString(string: "cat"),
+            NSNumber(integerLiteral: 1),
+            NSNumber(integerLiteral: 2),
+            NSNumber(integerLiteral: 3),
+            NSString(string: "cat"),
+        ]
+        let result = List.diffing(oldArray: o, newArray: n)
+        XCTAssertFalse(result.hasChanges)
+    }
+    
+    func test_whenDuplicateObjects_thatMovesAreUnique() {
+        let o: [NSObject] = [
+            NSString(string: "cat"),
+            NSObject(),
+            NSString(string: "dog"),
+            NSString(string: "dog"),
+            NSObject(),
+            NSObject(),
+            NSString(string: "cat"),
+            NSNumber(integerLiteral: 65),
+        ]
+        let n: [NSObject] = [
+            NSString(string: "cat"),
+            o[1],
+            NSString(string: "dog"),
+            o[4],
+            NSString(string: "dog"),
+            o[5],
+            NSString(string: "cat"),
+            NSString(string: "cat"),
+            NSString(string: "fish"),
+            NSNumber(integerLiteral: 65),
+        ]
+        let result = List.diffing(oldArray: o, newArray: n)
+        XCTAssertTrue(result.hasChanges)
+        XCTAssertEqual(Set(result.moves.map { $0.from }).count, result.moves.count)
+    }
     
     func test_whenMovingObjectShiftsOthers_thatMovesContainRequiredMoves() {
         let o = Array<Int>(arrayLiteral: 1, 2, 3, 4, 5, 6, 7)
@@ -172,11 +368,19 @@ class ListDiffTests : XCTestCase {
             ("test_whenSwappingObjects_thatResultHasMoves", test_whenSwappingObjects_thatResultHasMoves),
             ("test_whenMovingObjectsTogether_thatResultHasMoves", test_whenMovingObjectsTogether_thatResultHasMoves),
             ("test_whenSwappingObjects_thatResultHasMoves2", test_whenSwappingObjects_thatResultHasMoves2),
+            ("test_whenObjectEqualityChanges_thatResultHasUpdates", test_whenObjectEqualityChanges_thatResultHasUpdates),
             ("test_whenDiffingWordsFromPaper_thatInsertsMatchPaper", test_whenDiffingWordsFromPaper_thatInsertsMatchPaper),
             ("test_whenDiffingWordsFromPaper_thatDeletesMatchPaper", test_whenDiffingWordsFromPaper_thatDeletesMatchPaper),
             ("test_whenDeletingItems_withInserts_withMoves_thatResultHasInsertsMovesAndDeletes", test_whenDeletingItems_withInserts_withMoves_thatResultHasInsertsMovesAndDeletes),
+            ("test_whenMovingItems_withEqualityChanges_thatResultsHasMovesAndUpdates", test_whenMovingItems_withEqualityChanges_thatResultsHasMovesAndUpdates),
+            ("test_whenDiffingPointers_withObjectCopy_thatResultHasUpdate", test_whenDiffingPointers_withObjectCopy_thatResultHasUpdate),
+            ("test_whenDiffingPointers_withSameObjects_thatResultHasNoChanges", test_whenDiffingPointers_withSameObjects_thatResultHasNoChanges),
             ("test_whenDeletingObjects_withArrayOfEqualObjects_thatChangeCountMatches", test_whenDeletingObjects_withArrayOfEqualObjects_thatChangeCountMatches),
             ("test_whenInsertingObjects_withArrayOfEqualObjects_thatChangeCountMatches", test_whenInsertingObjects_withArrayOfEqualObjects_thatChangeCountMatches),
+            ("test_whenInsertingObject_withOldArrayHavingMultiples_thatChangeCountMatches", test_whenInsertingObject_withOldArrayHavingMultiples_thatChangeCountMatches),
+            ("test_whenMovingDuplicateObjects_thatChangeCountMatches", test_whenMovingDuplicateObjects_thatChangeCountMatches),
+            ("test_whenDiffingDuplicatesAtTail_withDuplicateAtHead_thatResultHasNoChanges", test_whenDiffingDuplicatesAtTail_withDuplicateAtHead_thatResultHasNoChanges),
+            ("test_whenDuplicateObjects_thatMovesAreUnique", test_whenDuplicateObjects_thatMovesAreUnique),
             ("test_whenMovingObjectShiftsOthers_thatMovesContainRequiredMoves", test_whenMovingObjectShiftsOthers_thatMovesContainRequiredMoves),
             ("test_whenDiffing_thatOldIndexesMatch", test_whenDiffing_thatOldIndexesMatch),
             ("test_whenDiffing_thatNewIndexesMatch", test_whenDiffing_thatNewIndexesMatch),
