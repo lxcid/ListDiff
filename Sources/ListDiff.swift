@@ -87,7 +87,7 @@ enum List {
         }
     }
     
-    static func diffing(oldArray:Array<Diffable>, newArray:Array<Diffable>) -> Result {
+    static func diffing<T: Diffable & Equatable>(oldArray:Array<T>, newArray:Array<T>) -> Result {
         // symbol table uses the old/new array `diffIdentifier` as the key and `Entry` as the value
         var table = Dictionary<AnyHashable, Entry>()
         
@@ -139,16 +139,13 @@ enum List {
             guard let oldIndex = entry.oldIndexes.pop() else {
                 return
             }
-            /*
-            // TODO:(stan@trifia.com) Equality check…
-            if (oldIndex < oldArray.count) {
+            if oldIndex < oldArray.count {
                 let n = newArray[i]
                 let o = oldArray[oldIndex]
                 if n != o {
                     entry.updated = true
                 }
             }
-            */
             
             // if an item occurs in the new and old array, it is unique
             // assign the index of new and old records to the opposite index (reverse lookup)
@@ -187,7 +184,7 @@ enum List {
                 // calculate the offset and determine if there was a move
                 // if the indexes match, ignore the index
                 let deleteOffset = deleteOffsets[oldIndex]
-                if ((oldIndex - deleteOffset + insertOffset) != i) {
+                if (oldIndex - deleteOffset + insertOffset) != i {
                     result.moves.append(MoveIndex(from: oldIndex, to: i))
                 }
             } else { // add to inserts if the opposing index is nil
