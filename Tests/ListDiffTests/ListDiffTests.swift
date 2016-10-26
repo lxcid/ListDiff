@@ -1,15 +1,15 @@
 import Foundation
 import XCTest
-@testable import ListDiff
+import ListDiff
 
 extension Int : Diffable {
-    var diffIdentifier: AnyHashable {
+    public var diffIdentifier: AnyHashable {
         return String(self)
     }
 }
 
 extension String: Diffable {
-    var diffIdentifier: AnyHashable {
+    public var diffIdentifier: AnyHashable {
         return self
     }
 }
@@ -43,7 +43,7 @@ class TestObjectRef : Diffable, Equatable {
 }
 
 extension NSObject : Diffable {
-    var diffIdentifier: AnyHashable {
+    public var diffIdentifier: AnyHashable {
         return self.hash
     }
 }

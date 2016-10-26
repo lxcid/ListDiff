@@ -13,12 +13,12 @@ struct Stack<Element> {
     }
 }
 
-protocol Diffable {
+public protocol Diffable {
     var diffIdentifier: AnyHashable { get }
 }
 
 /// https://github.com/Instagram/IGListKit/blob/master/Source/IGListDiff.mm
-enum List {
+public enum List {
     /// Used to track data stats while diffing.
     /// We expect to keep a reference of entry, thus its declaration as (final) class.
     final class Entry {
@@ -54,40 +54,45 @@ enum List {
         }
     }
     
-    struct MoveIndex : Equatable {
-        let from: Int
-        let to: Int
+    public struct MoveIndex : Equatable {
+        public let from: Int
+        public let to: Int
+        
+        public init(from: Int, to: Int) {
+            self.from = from
+            self.to = to
+        }
         
         public static func ==(lhs: MoveIndex, rhs: MoveIndex) -> Bool {
             return lhs.from == rhs.from && lhs.to == rhs.to
         }
     }
     
-    struct Result {
-        var inserts = IndexSet()
-        var updates = IndexSet()
-        var deletes = IndexSet()
-        var moves = Array<MoveIndex>()
-        var oldMap = Dictionary<AnyHashable, Int>()
-        var newMap = Dictionary<AnyHashable, Int>()
-        var hasChanges: Bool {
+    public struct Result {
+        public var inserts = IndexSet()
+        public var updates = IndexSet()
+        public var deletes = IndexSet()
+        public var moves = Array<MoveIndex>()
+        public var oldMap = Dictionary<AnyHashable, Int>()
+        public var newMap = Dictionary<AnyHashable, Int>()
+        public var hasChanges: Bool {
             return (self.inserts.count > 0) || (self.deletes.count > 0) || (self.updates.count > 0) || (self.moves.count > 0)
         }
-        var changeCount: Int {
+        public var changeCount: Int {
             return self.inserts.count + self.deletes.count + self.updates.count + self.moves.count
         }
-        func validate(_ oldArray: Array<Diffable>, _ newArray: Array<Diffable>) -> Bool {
+        public func validate(_ oldArray: Array<Diffable>, _ newArray: Array<Diffable>) -> Bool {
             return (oldArray.count + self.inserts.count - self.deletes.count) == newArray.count
         }
-        func oldIndexFor(identifier: AnyHashable) -> Int? {
+        public func oldIndexFor(identifier: AnyHashable) -> Int? {
             return self.oldMap[identifier]
         }
-        func newIndexFor(identifier: AnyHashable) -> Int? {
+        public func newIndexFor(identifier: AnyHashable) -> Int? {
             return self.newMap[identifier]
         }
     }
     
-    static func diffing<T: Diffable & Equatable>(oldArray:Array<T>, newArray:Array<T>) -> Result {
+    public static func diffing<T: Diffable & Equatable>(oldArray:Array<T>, newArray:Array<T>) -> Result {
         // symbol table uses the old/new array `diffIdentifier` as the key and `Entry` as the value
         var table = Dictionary<AnyHashable, Entry>()
         
