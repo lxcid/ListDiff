@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/lxcid/ListDiff.svg?branch=master)](https://travis-ci.org/lxcid/ListDiff)
+
 # ListDiff
 
 __ListDiff__ is a Swift port of [IGListKit](https://github.com/Instagram/IGListKit)'s [IGListDiff](https://github.com/Instagram/IGListKit/blob/master/Source/IGListDiff.mm).
