@@ -18,8 +18,21 @@ swift package generate-xcodeproj
 ## Usage
 
 ```swift
-// TOOD: (stan@trifia.com) Provides usage details…
 import ListDiff
+
+extension Int : Diffable {
+    public var diffIdentifier: AnyHashable {
+        return self
+    }
+}
+let o = [0, 1, 2]
+let n = [2, 1, 3]
+let result = List.diffing(oldArray: o, newArray: n)
+// result.hasChanges == true
+// result.deletes == IndexSet(integer: 0)
+// result.inserts == IndexSet(integer: 2)
+// result.moves == [List.MoveIndex(from: 2, to: 0), List.MoveIndex(from: 1, to: 1)]
+// result.changeCount == 4
 ```
 
 ## Rationale
