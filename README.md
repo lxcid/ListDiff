@@ -1,6 +1,7 @@
 # ListDiff
 
-__ListDiff__ is an Swift port of [IGListKit](https://github.com/Instagram/IGListKit)'s [IGListDiff](https://github.com/Instagram/IGListKit/blob/master/Source/IGListDiff.mm). It is an implementation of [an algorithm by Paul Heckel](http://dl.acm.org/citation.cfm?id=359467&dl=ACM&coll=DL).
+__ListDiff__ is a Swift port of [IGListKit](https://github.com/Instagram/IGListKit)'s [IGListDiff](https://github.com/Instagram/IGListKit/blob/master/Source/IGListDiff.mm).
+It is an implementation of [an algorithm by Paul Heckel](http://dl.acm.org/citation.cfm?id=359467&dl=ACM&coll=DL) that calculates the diff between 2 arrays.
 
 ## Motivation
 
@@ -8,8 +9,15 @@ The motivation for this project came from the following [challenge](https://gith
 
 ## Getting Started
 
-```
+```bash
 swift package generate-xcodeproj
+```
+
+## Usage
+
+```swift
+// TOOD: (stan@trifia.com) Provides usage details…
+import ListDiff
 ```
 
 ## Rationale
