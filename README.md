@@ -15,6 +15,20 @@ The motivation for this project came from the following [challenge](https://gith
 swift package generate-xcodeproj
 ```
 
+## Installation
+
+#### CocoaPods
+
+```ruby
+pod 'ListDiff'
+```
+
+#### Carthage
+
+```ogdl
+github "lxcid/ListDiff" "master"
+```
+
 ## Usage
 
 ```swift
