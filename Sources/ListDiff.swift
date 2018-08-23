@@ -205,3 +205,33 @@ public enum List {
         return result
     }
 }
+
+public extension List.Result {
+    func forBatchUpdates() -> List.Result {
+        var result = self
+        result.mutatingForBatchUpdates()
+        return result
+    }
+    
+    private mutating func mutatingForBatchUpdates() {
+        // convert move+update to delete+insert, respecting the from/to of the move
+        for (index, move) in moves.enumerated().reversed() {
+            if let _ = updates.remove(move.from) {
+                moves.remove(at: index)
+                deletes.insert(move.from)
+                inserts.insert(move.to)
+            }
+        }
+        
+        // iterate all new identifiers. if its index is updated, delete from the old index and insert the new index
+        for (key, oldIndex) in oldMap {
+            if updates.contains(oldIndex), let newIndex = newMap[key] {
+                deletes.insert(oldIndex)
+                inserts.insert(newIndex)
+            }
+        }
+        
+        updates.removeAll()
+    }
+}
+
