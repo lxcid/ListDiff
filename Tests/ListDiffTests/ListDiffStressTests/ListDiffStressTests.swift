@@ -86,6 +86,8 @@ final class ListDiffStressTests: XCTestCase {
                     
                     print("")
                     
+                    collectionViewUpdater.cleanUp()
+                    
                     expectations[index].fulfill()
                     
                     self?.performTest(
