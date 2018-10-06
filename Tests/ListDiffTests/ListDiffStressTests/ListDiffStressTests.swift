@@ -6,7 +6,7 @@ private let collectionSize = 100
 private let iterationsCount = 1000
 
 final class ListDiffStressTests: XCTestCase {
-    func test_listDiff_doesNotCrashUICollectionViewAndReturnsCorrectDiff() {
+    func test_listDiff_doesNotCrashUICollectionView_duringStressCollectionChanges() {
         let expectations = (0..<iterationsCount).map {
             expectation(description: "async expectation of iteration \($0)")
         }
@@ -90,11 +90,13 @@ final class ListDiffStressTests: XCTestCase {
                     
                     expectations[index].fulfill()
                     
-                    self?.performTest(
-                        index: index + 1,
-                        expectations: expectations,
-                        previousCellDataList: cellDataGeneratorResult.to
-                    )
+                    DispatchQueue.main.async {
+                        self?.performTest(
+                            index: index + 1,
+                            expectations: expectations,
+                            previousCellDataList: cellDataGeneratorResult.to
+                        )
+                    }
                 }
             )
         }

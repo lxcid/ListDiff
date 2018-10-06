@@ -76,7 +76,7 @@ final class CollectionViewUpdater: NSObject, UICollectionViewDataSource {
         diff: List.Result,
         completion: @escaping (CollectionViewUpdaterResult) -> ())
     {
-        var catchedException: NSException?
+        var caughtException: NSException?
         
         ObjCExceptionCatcher.tryClosure(
             tryClosure: {
@@ -87,12 +87,12 @@ final class CollectionViewUpdater: NSObject, UICollectionViewDataSource {
                 )
             },
             catchClosure: { exception in
-                catchedException = exception
+                caughtException = exception
             },
             finallyClosure: {
-                if let catchedException = catchedException {
+                if let caughtException = caughtException {
                     completion(
-                        .exception(catchedException)
+                        .exception(caughtException)
                     )
                 } else {
                     let visibleIndexPaths = collectionView.indexPathsForVisibleItems.sorted { $0.row < $1.row }
