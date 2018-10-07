@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/lxcid/ListDiff.svg?branch=master)](https://travis-ci.org/lxcid/ListDiff)
+[![CocoaPods Compatible](https://img.shields.io/cocoapods/v/ListDiff.svg)](https://cocoapods.org/pods/ListDiff)
 
 # ListDiff
 
