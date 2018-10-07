@@ -3,7 +3,7 @@ import UIKit
 @testable import ListDiff
 
 private let collectionSize = 100
-private let iterationsCount = 1000
+private let iterationsCount = 50
 
 final class ListDiffStressTests: XCTestCase {
     func test_listDiff_doesNotCrashUICollectionView_duringStressCollectionChanges() {
@@ -12,7 +12,7 @@ final class ListDiffStressTests: XCTestCase {
         }
         
         performTests(expectations: expectations)
-        waitForExpectations(timeout: 30)
+        waitForExpectations(timeout: 60)
     }
     
     // MARK: - Private
