@@ -11,6 +11,14 @@
 		A6FD5D511F8B710A006A2CDC /* ListDiffTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6FD5D501F8B710A006A2CDC /* ListDiffTests.swift */; };
 		A6FD5D531F8B710A006A2CDC /* ListDiff.h in Headers */ = {isa = PBXBuildFile; fileRef = A6FD5D451F8B710A006A2CDC /* ListDiff.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A6FD5D5E1F8B71C1006A2CDC /* ListDiff.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6FD5D5D1F8B71C1006A2CDC /* ListDiff.swift */; };
+		CCA06441212EB7F500CAB660 /* ListDiffStressTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCA06440212EB7F500CAB660 /* ListDiffStressTests.swift */; };
+		CCA06447212EC12400CAB660 /* ObjCExceptionCatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCA06445212EC12400CAB660 /* ObjCExceptionCatcher.swift */; };
+		CCA06448212EC12400CAB660 /* ObjCExceptionCatcherHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = CCA06446212EC12400CAB660 /* ObjCExceptionCatcherHelper.m */; };
+		CCA0644F212EC3FA00CAB660 /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCA0644B212EC3FA00CAB660 /* Cell.swift */; };
+		CCA06450212EC3FA00CAB660 /* CollectionViewUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCA0644C212EC3FA00CAB660 /* CollectionViewUpdater.swift */; };
+		CCA06451212EC3FA00CAB660 /* CellData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCA0644D212EC3FA00CAB660 /* CellData.swift */; };
+		CCA06452212EC3FA00CAB660 /* CellDataGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCA0644E212EC3FA00CAB660 /* CellDataGenerator.swift */; };
+		CCA06454212EC53100CAB660 /* CellDataGeneratorResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCA06453212EC53100CAB660 /* CellDataGeneratorResult.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,6 +39,16 @@
 		A6FD5D501F8B710A006A2CDC /* ListDiffTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListDiffTests.swift; sourceTree = "<group>"; };
 		A6FD5D521F8B710A006A2CDC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A6FD5D5D1F8B71C1006A2CDC /* ListDiff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ListDiff.swift; path = Sources/ListDiff.swift; sourceTree = SOURCE_ROOT; };
+		CCA06440212EB7F500CAB660 /* ListDiffStressTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListDiffStressTests.swift; sourceTree = "<group>"; };
+		CCA06443212EC12300CAB660 /* ListDiffTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ListDiffTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		CCA06444212EC12300CAB660 /* ObjCExceptionCatcherHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjCExceptionCatcherHelper.h; sourceTree = "<group>"; };
+		CCA06445212EC12400CAB660 /* ObjCExceptionCatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjCExceptionCatcher.swift; sourceTree = "<group>"; };
+		CCA06446212EC12400CAB660 /* ObjCExceptionCatcherHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjCExceptionCatcherHelper.m; sourceTree = "<group>"; };
+		CCA0644B212EC3FA00CAB660 /* Cell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
+		CCA0644C212EC3FA00CAB660 /* CollectionViewUpdater.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewUpdater.swift; sourceTree = "<group>"; };
+		CCA0644D212EC3FA00CAB660 /* CellData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellData.swift; sourceTree = "<group>"; };
+		CCA0644E212EC3FA00CAB660 /* CellDataGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellDataGenerator.swift; sourceTree = "<group>"; };
+		CCA06453212EC53100CAB660 /* CellDataGeneratorResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellDataGeneratorResult.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,7 +102,9 @@
 			isa = PBXGroup;
 			children = (
 				A6FD5D501F8B710A006A2CDC /* ListDiffTests.swift */,
+				CCA06442212EB81100CAB660 /* ListDiffStressTests */,
 				A6FD5D521F8B710A006A2CDC /* Info.plist */,
+				CCA06443212EC12300CAB660 /* ListDiffTests-Bridging-Header.h */,
 			);
 			name = ListDiffTests;
 			path = Tests/ListDiffTests;
@@ -96,6 +116,38 @@
 				A6FD5D5D1F8B71C1006A2CDC /* ListDiff.swift */,
 			);
 			path = Sources;
+			sourceTree = "<group>";
+		};
+		CCA06442212EB81100CAB660 /* ListDiffStressTests */ = {
+			isa = PBXGroup;
+			children = (
+				CCA06440212EB7F500CAB660 /* ListDiffStressTests.swift */,
+				CCA0644A212EC3A100CAB660 /* Support */,
+			);
+			path = ListDiffStressTests;
+			sourceTree = "<group>";
+		};
+		CCA06449212EC39600CAB660 /* ObjCExceptionCatcher */ = {
+			isa = PBXGroup;
+			children = (
+				CCA06445212EC12400CAB660 /* ObjCExceptionCatcher.swift */,
+				CCA06444212EC12300CAB660 /* ObjCExceptionCatcherHelper.h */,
+				CCA06446212EC12400CAB660 /* ObjCExceptionCatcherHelper.m */,
+			);
+			path = ObjCExceptionCatcher;
+			sourceTree = "<group>";
+		};
+		CCA0644A212EC3A100CAB660 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				CCA0644B212EC3FA00CAB660 /* Cell.swift */,
+				CCA0644D212EC3FA00CAB660 /* CellData.swift */,
+				CCA0644E212EC3FA00CAB660 /* CellDataGenerator.swift */,
+				CCA06453212EC53100CAB660 /* CellDataGeneratorResult.swift */,
+				CCA0644C212EC3FA00CAB660 /* CollectionViewUpdater.swift */,
+				CCA06449212EC39600CAB660 /* ObjCExceptionCatcher */,
+			);
+			path = Support;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -165,6 +217,7 @@
 					};
 					A6FD5D4A1F8B710A006A2CDC = {
 						CreatedOnToolsVersion = 9.0;
+						LastSwiftMigration = 0930;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -217,6 +270,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CCA06441212EB7F500CAB660 /* ListDiffStressTests.swift in Sources */,
+				CCA06447212EC12400CAB660 /* ObjCExceptionCatcher.swift in Sources */,
+				CCA06450212EC3FA00CAB660 /* CollectionViewUpdater.swift in Sources */,
+				CCA06452212EC3FA00CAB660 /* CellDataGenerator.swift in Sources */,
+				CCA06454212EC53100CAB660 /* CellDataGeneratorResult.swift in Sources */,
+				CCA0644F212EC3FA00CAB660 /* Cell.swift in Sources */,
+				CCA06451212EC3FA00CAB660 /* CellData.swift in Sources */,
+				CCA06448212EC12400CAB660 /* ObjCExceptionCatcherHelper.m in Sources */,
 				A6FD5D511F8B710A006A2CDC /* ListDiffTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -394,11 +455,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = Tests/ListDiffTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.github.lxcid.ListDiffTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Tests/ListDiffTests/ListDiffTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -408,11 +472,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = Tests/ListDiffTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.github.lxcid.ListDiffTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Tests/ListDiffTests/ListDiffTests-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
