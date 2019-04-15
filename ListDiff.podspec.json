@@ -19,6 +19,5 @@
     "ios": "8.0",
     "osx": "10.10"
   },
-  "source_files": "Sources/**/*",
-  "swift_version": "3.3"
+  "source_files": "Sources/**/*"
 }
